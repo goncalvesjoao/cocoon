@@ -26,7 +26,7 @@ module Cocoon
 
         is_dynamic = f.object.new_record?
         html_options[:class] = [html_options[:class], "remove_fields #{is_dynamic ? 'dynamic' : 'existing'}"].compact.join(' ')
-        hidden_field_tag("#{f.object_name}[_destroy]") + link_to(name, '#', html_options)
+        hidden_destroy_field(f) + link_to(name, '#', html_options)
       end
     end
 
@@ -127,6 +127,11 @@ module Cocoon
       # association???
       conditions = instance.respond_to?(:conditions) ? instance.conditions.flatten : []
       instance.klass.new(*conditions)
+    end
+
+    def hidden_destroy_field(f, value = nil, options = {})
+      value = value.nil? && f.object.marked_for_destruction? ? true : nil
+      hidden_field_tag("#{f.object_name}[_destroy]", value, options)
     end
 
   end
