@@ -130,10 +130,11 @@ module Cocoon
     end
 
     def hidden_destroy_field(f)
-      value = value.nil? && f.object.marked_for_destruction? ? true : nil
+      value = f.object.marked_for_destruction? ? true : nil
+      
+      hide_me_script = value ? "<script>$(function() { $('[name=\"#{f.object_name}[_destroy]\"]').parent().find('a.remove_fields').click(); });</script>" : ""
 
-      hidden_field_tag("#{f.object_name}[_destroy]", value) +
-      "<script>$(function() { $('[name=\"#{f.object_name}[_destroy]\"]').next().click(); });</script>".html_safe
+      hidden_field_tag("#{f.object_name}[_destroy]", value) + hide_me_script.html_safe
     end
 
   end
