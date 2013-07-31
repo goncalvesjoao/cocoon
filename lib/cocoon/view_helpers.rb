@@ -129,9 +129,11 @@ module Cocoon
       instance.klass.new(*conditions)
     end
 
-    def hidden_destroy_field(f, value = nil, options = {})
+    def hidden_destroy_field(f)
       value = value.nil? && f.object.marked_for_destruction? ? true : nil
-      hidden_field_tag("#{f.object_name}[_destroy]", value, options)
+
+      hidden_field_tag("#{f.object_name}[_destroy]", value) +
+      "<script>$(function() { $('[name=\"#{f.object_name}[_destroy]\"]').next().click(); });</script>".html_safe
     end
 
   end
